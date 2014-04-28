@@ -6,7 +6,7 @@ package com.jianyu.attendance;
 public class AttendanceInfo {
     private String name;
     private int type;
-    private int time;
+    private long time;
 
     public String getName() {
         return name;
@@ -24,11 +24,11 @@ public class AttendanceInfo {
         this.type = type;
     }
 
-    public int getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(long time) {
         this.time = time;
     }
 }
