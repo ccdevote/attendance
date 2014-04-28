@@ -58,6 +58,7 @@ public class AttendanceServer {
                         List<String> list = FileUtils.read(AttendanceServer.PATH);
                         List<AttendanceInfo> infos= AttendanceInfo.parseToAttendanceList(list);
                         //TODO AttendanceSort.sort(infos);
+                        //TODO print infos
                     } else if ("shutdown".equals(atReceiveString)) {
                         break;
                     } else {
