@@ -3,10 +3,9 @@ package com.jianyu.attendance;
 /**
  * Created by pig on 4/28/14.
  */
-public class AttendanceInfo {
+public class AttendanceInfo implements Comparable {
     private String name;
-    private int type;
-    private int time;
+    private double time;
 
     public String getName() {
         return name;
@@ -16,19 +15,16 @@ public class AttendanceInfo {
         this.name = name;
     }
 
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public int getTime() {
+    public double getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(double time) {
         this.time = time;
     }
+
+//    public int compareTo(Object o){
+//        double time_cp = ((AttendanceInfo)o).time;
+//        return (time < time_cp ? -1 : (time == time_cp ? 0 :1 ));
+//    }
 }
