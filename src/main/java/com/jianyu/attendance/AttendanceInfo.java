@@ -1,5 +1,7 @@
 package com.jianyu.attendance;
 
+import java.util.List;
+
 /**
  * Created by pig on 4/28/14.
  */
@@ -30,5 +32,10 @@ public class AttendanceInfo {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    public static List<AttendanceInfo> parseToAttendanceList(List<String> list){
+        //TODO parse List<String> to List<AttendanceInfo>
+        return null;
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class FileUtils {
 
-    public void wirte(String path, String str) throws IOException {
+    public static void wirte(String path, String str) throws IOException {
         if (path == null || path.isEmpty())
             throw new IllegalArgumentException("please input valid path");
         File file = new File(path);
@@ -28,7 +28,7 @@ public class FileUtils {
         }
     }
 
-    public List<String> read(String path) throws IOException {
+    public static List<String> read(String path) throws IOException {
         if (path == null || path.isEmpty())
             throw new IllegalArgumentException("please input valid path");
         File file = new File(path);
