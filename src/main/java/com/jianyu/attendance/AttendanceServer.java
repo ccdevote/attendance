@@ -5,5 +5,5 @@ package com.jianyu.attendance;
  */
 public class AttendanceServer {
 
-    
+
 }
