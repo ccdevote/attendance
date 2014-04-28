@@ -3,7 +3,7 @@ package com.jianyu.attendance;
 /**
  * Created by pig on 4/28/14.
  */
-public class AttendanceInfo implements Comparable {
+public class AttendanceInfo {
     private String name;
     private double time;
 
@@ -27,4 +27,5 @@ public class AttendanceInfo implements Comparable {
 //        double time_cp = ((AttendanceInfo)o).time;
 //        return (time < time_cp ? -1 : (time == time_cp ? 0 :1 ));
 //    }
+
 }

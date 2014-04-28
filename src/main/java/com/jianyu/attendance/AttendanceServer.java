@@ -1,7 +1,7 @@
 package com.jianyu.attendance;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.String;
 import java.net.ServerSocket;
@@ -9,66 +9,81 @@ import java.net.Socket;
 import java.util.*;
 
 
-public class AttendanceServer{
-    public static final int SERVER_PORT=2010;
-    public static void main(String[] args) {
-        // TODO Auto-generated method stub
+public class AttendanceServer {
 
-        try{
-            ServerSocket atServer= new ServerSocket(SERVER_PORT);
-            System.out.println("Listening Port is "+atServer.getLocalPort()+"...");
-            while(true){
-                Socket atClient=atServer.accept();
-                System.out.println("have a client entering , the IP is "+atClient.getInetAddress()+"...");
-                System.out.println("have a client entering , the Port is "+atClient.getPort()+"...");
+    private static final int SERVER_PORT = 2010;
+    private static final String PATH = "~/attend.txt";
+
+    public static void main(String[] args) {
+        ServerSocket atServer = null;
+        try {
+            atServer = new ServerSocket(SERVER_PORT);
+            System.out.println("Listening Port is " + atServer.getLocalPort() + "...");
+            while (true) {
+                Socket atClient = atServer.accept();
+                System.out.println("have a client entering , the IP is " + atClient.getInetAddress() + "...");
+                System.out.println("have a client entering , the Port is " + atClient.getPort() + "...");
                 new GetGpsThreadFun(atClient).start();
             }
             //vntClient.close();
-
-        }catch (Exception e) {
-            // TODO: handle exception
-
+        } catch (Exception e) {
+            System.err.println("error in bootstrap server");
             e.printStackTrace();
+        } finally {
+            try {
+                atServer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
-}
-class GetGpsThreadFun extends Thread{
-    private Socket atThreadClient;
-    public GetGpsThreadFun(Socket vntThreadSocket){
-        atThreadClient=atThreadSocket;
-    }
-    public void run(){
-        try{
-            BufferedReader atThreadIS=new BufferedReader(new InputStreamReader(atThreadClient.getInputStream()));
-            while(true){
-                String atReceiveString=atThreadIS.readLine();
-                if (atReceiveString!=null){
-                    System.out.println(atThreadClient.getInetAddress()+":"+atThreadClient.getPort()+":"+atReceiveString);
-                }
-                if("query".equals(atReceiveString)){
-                    FileReader fr = new FileReader("~/tmp/attendance.txt");
-                    BufferedReader br = new BufferedReader(fr);
-                    Map<String,AttendInfo> map = new HashMap<String, AttendInfo>();
-                    String data =br.readLine();
-                    while(data!=null){
-                        StringTokenizer tokenizer = new StringTokenizer(data);
-                        while(tokenizer.hasMoreTokens()){
-                            AttendInfo ai = new AttendInfo();
-                            ai.set
-                        }
+
+    static class GetGpsThreadFun extends Thread {
+        private Socket atThreadClient;
+
+        public GetGpsThreadFun(Socket vntThreadSocket) {
+            atThreadClient = vntThreadSocket;
+        }
+
+        public void run() {
+            BufferedReader atThreadIS = null;
+            try {
+                atThreadIS = new BufferedReader(new InputStreamReader(atThreadClient.getInputStream()));
+                while (true) {
+                    String atReceiveString = atThreadIS.readLine();
+                    if (atReceiveString != null) {
+                        System.out.println(atThreadClient.getInetAddress() + ":" + atThreadClient.getPort() + ":" + atReceiveString);
                     }
-
-
+                    if ("query".equals(atReceiveString)) {
+                        List<String> list = FileUtils.read(AttendanceServer.PATH);
+                        AttendanceSort.doConvert(list);
+                        AttendanceInfo[] infos = AttendanceSort.doSort();
+                        for(int i =0;i<infos.length;i++){
+                            System.out.println(infos[i].getName()+"  "+infos[i].getTime()+"  " +(i+1));
+                        }
+                    } else if ("shutdown".equals(atReceiveString)) {
+                        break;
+                    } else {
+                        FileUtils.wirte(AttendanceServer.PATH,atReceiveString);
+                    }
                 }
-                if("shutdown".equals(atReceiveString)){
-                    break;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }finally {
+                try {
+                    atThreadIS.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }finally{
+                    try {
+                        atThreadClient.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-            atThreadIS.close();
-            atThreadClient.close();
-        }catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
         }
     }
+
 }
+

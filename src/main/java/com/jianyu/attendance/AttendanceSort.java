@@ -52,7 +52,7 @@ public class AttendanceSort {
         }
 
     }
-    public AttendanceInfo[] doSort(){
+    public static AttendanceInfo[] doSort(){
         AttendanceInfo[] infos = new AttendanceInfo[map.size()];
         int k=0;
         for (String key :map.keySet()){
